@@ -24,61 +24,60 @@ void importDataFromFile(string filename,vector<string> &names,vector<int> &score
 {
     ifstream name_sc(filename.c_str());
     string text;
-    string text2;
-    int i = 0;
+    char name[100];
+    int a,b,c,i = 0;
+    char format[] = "%[^:]:%d %d %d";
     while(getline(name_sc,text))
     {
-        text2 = text;
+        sscanf(text.c_str(),format,name,&a,&b,&c);
+        names.push_back(name);
+        scores.push_back(a+b+c);
+        grades.push_back(score2grade(scores.at(i)));
         i++;
     }
-    int a,b,c,score;
-    char name[100];
-    char format[] = "%[^:] %d %d %d";
-    sscanf(text2,format,&name,&a,&b,&c);
-    names.push_back(name);
-    scores.push_back(a+b+c);
-    score = a+b+c;
-    grades.push_back(score2grade(score));
 }
 
 void getCommand(string &command ,string &key){
-    cout << "Please in put your command: ";
-    cin >> command >> key;
+    cout << "Please input your command: ";
+    string comm;
+    char com[10],ke[100];
+    getline(cin,comm);
+    sscanf(comm.c_str(),"%s %[^1234567890]",com,ke);
+    command = com;
+    key = ke;
 }
 
 void searchName(vector<string> names,vector<int> scores,vector<char> grades,string key)
 {
-    cout << "---------------------------------";
+    bool check = 1;
+    cout << "---------------------------------" << endl;
     for(int i=0;i<26;i++)
     {
-        if(toUpperStr(names.at(i)) == key)
+        if(toUpperStr(names.at(i)) == toUpperStr(key))
         {
-            cout << names.at(i) << "'s score = " << scores.at(i);
-            cout << names.at(i) << "'s grade = " << grades.at(i);
-        }
-        else
-        {
-            cout << "Cannot found.";
+            cout << names.at(i) << "'s score = " << scores.at(i) << endl;
+            cout << names.at(i) << "'s grade = " << grades.at(i) << endl;
+            check = 0;
         }
     }
-    cout << "---------------------------------";
+    if(check == 1) cout << "Cannot found." << endl;
+    cout << "---------------------------------" << endl;
 }
 
 void searchGrade(vector<string> names,vector<int> scores,vector<char> grades,string key)
 {
-    cout << "---------------------------------";
+    bool check = 1;
+    cout << "---------------------------------" << endl;
     for(int i=0;i<26;i++)
     {
-        if(grades.at(i) == key)
+        if(grades.at(i) == key[0])
         {
-            cout << names.at(i) << "(" << scores.at(i) << ")";
-        }
-        else
-        {
-            cout << "Cannot found.";
+            cout << names.at(i) << " (" << scores.at(i) << ")" << endl;
+            check = 0;
         }
     }
-    cout << "---------------------------------";
+    if(check == 1) cout << "Cannot found." << endl;
+    cout << "---------------------------------" << endl;
 }
 
 
@@ -97,13 +96,11 @@ int main(){
         if(command == "EXIT") break;
         else if(command == "GRADE") searchGrade(names, scores, grades, key);
         else if(command == "NAME") searchName(names, scores, grades, key);
-        else
-        {
+        else{
             cout << "---------------------------------\n";
             cout << "Invalid command.\n";
             cout << "---------------------------------\n";
         }
-
     }while(true);
     
     return 0;
