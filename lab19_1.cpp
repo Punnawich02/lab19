@@ -22,19 +22,19 @@ string toUpperStr(string x){
 
 void importDataFromFile(string filename,vector<string> &names,vector<int> &scores,vector<char> &grades)
 {
-    ifstream name_sc(filename);
+    ifstream name_sc(filename.c_str());
     string text;
-    char text2[100];
+    string text2;
     int i = 0;
     while(getline(name_sc,text))
     {
-        text2[i] = text;
+        text2 = text;
         i++;
     }
     int a,b,c,score;
     char name[100];
     char format[] = "%[^:] %d %d %d";
-    sscanf(text2,format,name,&a,&b,&c);
+    sscanf(text2,format,&name,&a,&b,&c);
     names.push_back(name);
     scores.push_back(a+b+c);
     score = a+b+c;
@@ -69,7 +69,7 @@ void searchGrade(vector<string> names,vector<int> scores,vector<char> grades,str
     cout << "---------------------------------";
     for(int i=0;i<26;i++)
     {
-        if(toUpperStr(grades.at(i)) == key)
+        if(grades.at(i) == key)
         {
             cout << names.at(i) << "(" << scores.at(i) << ")";
         }
